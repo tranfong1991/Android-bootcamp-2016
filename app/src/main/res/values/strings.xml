@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Bootcamp</string>
+    
+    <string name="pgs_action_search">Search</string>
+    <string name="pgs_status_idle">Idle</string>
+    <string name="pgs_status_searching">Searching &#8230;</string>
+    <string name="pgs_status_no_results">No Results</string>
+    
+    <string name="psgi_photo_content_description">Photo</string>
+    
+    <string name="pd_photo_content_description">Photo Detail</string>
+    <string name="pd_loading">Loading &#8230;</string>
+
+</resources>
