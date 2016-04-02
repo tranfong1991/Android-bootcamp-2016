@@ -4,10 +4,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.bottlerocketapps.bootcamp.R;
+
 public class PhotoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     public interface OnPhotoViewClickListener {
-
         void onPhotoViewClick(int adapterPosition);
     }
 
@@ -18,10 +19,11 @@ public class PhotoViewHolder extends RecyclerView.ViewHolder implements View.OnC
     public PhotoViewHolder(View itemView) {
         super(itemView);
 
-        //TODO: Cache photo findViewById calls
+        //Cache photo findViewById calls
+        photo = (ImageView) itemView.findViewById(R.id.psgi_photo);
 
-        //TODO: Set up photo click listener.
-
+        //Set up photo click listener.
+        photo.setOnClickListener(this);
     }
 
     public void setOnPhotoViewClickListener(OnPhotoViewClickListener listener) {
@@ -30,6 +32,9 @@ public class PhotoViewHolder extends RecyclerView.ViewHolder implements View.OnC
 
     @Override
     public void onClick(View v) {
-        //TODO: Pass photo click to photo click listener.
+        //Pass photo click to photo click listener.
+        if(mPhotoViewClickListener != null){
+            mPhotoViewClickListener.onPhotoViewClick(getAdapterPosition());
+        }
     }
 }

@@ -30,7 +30,10 @@ public class PhotoDetailFragment extends Fragment {
     public static PhotoDetailFragment newInstance(Photo selectedPhoto) {
         PhotoDetailFragment frag = new PhotoDetailFragment();
 
-        //TODO: Serialize the photo object into the arguments bundle
+        //Serialize the photo object into the arguments bundle
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_PHOTO, selectedPhoto);
+        frag.setArguments(args);
 
         return frag;
     }
@@ -47,9 +50,11 @@ public class PhotoDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRoot = inflater.inflate(R.layout.photo_detail_fragment, container, false);
         
-        //TODO: Find the image view
+        //Find the image view
+        mPhotoView = (ImageView) mRoot.findViewById(R.id.pd_image);
 
-        //TODO: Use Picasso to load the normal sized photo
+        //Use Picasso to load the normal sized photo
+        Picasso.with(getActivity()).load(PhotoApi.getNormalPhotoUri(mPhoto)).into(mPhotoView);
 
         return mRoot;
     }

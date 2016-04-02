@@ -1,11 +1,14 @@
 package com.bottlerocketapps.bootcamp.flickr.ui;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,16 +25,15 @@ import com.bottlerocketapps.bootcamp.flickr.loader.PhotoSearchLoader;
 import com.bottlerocketapps.bootcamp.flickr.model.Photo;
 import com.bottlerocketapps.bootcamp.flickr.model.PhotoSearchResult;
 
+import org.w3c.dom.Text;
+
 public class PhotoSearchGridFragment extends Fragment {
 
     private static final int LOADER_ID_SEARCH = 1;
-
     private static final String LOADER_ARG_QUERY = "query";
-
     private static final String SAVED_STATE_QUERY = "query";
 
     private TextView mStatusText;
-
     private String mQuery;
     private boolean mSearchLoaderStarted;
     private PhotoAdapter mPhotoGridAdapter;
@@ -44,29 +46,36 @@ public class PhotoSearchGridFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //TODO: Required in order for a Fragment to get a call to onCreateOptionsMenu()
-
+        //Required in order for a Fragment to get a call to onCreateOptionsMenu()
+        setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        //TODO: Inflate the layout resource.
-        View root = null;
+        //Inflate the layout resource.
+        View root = inflater.inflate(R.layout.photo_search_grid_fragment, container, false);
 
-        //TODO: Obtain the recycler view from the layout.
+        //Obtain the recycler view from the layout.
+        RecyclerView recyclerView = (RecyclerView)root.findViewById(R.id.psg_grid);
 
-        //TODO: Create a vertical grid layout manager with a span count of 4.
+        //Create a vertical grid layout manager with a span count of 4.
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 4);
 
-        //TODO: Set the layout manager of the recycler view.
+        //Set the layout manager of the recycler view.
+        recyclerView.setLayoutManager(layoutManager);
 
-        //TODO: Create a new photo adapter.
+        //Create a new photo adapter.
+        mPhotoGridAdapter = new PhotoAdapter(getActivity());
 
-        //TODO: Setup the on photo item click listener.
+        //Setup the on photo item click listener.
+        mPhotoGridAdapter.setOnPhotoClickListener(mPhotoClickListener);
 
-        //TODO: Attach the adapter to the recycler view.
+        //Attach the adapter to the recycler view.
+        recyclerView.setAdapter(mPhotoGridAdapter);
 
-        //TODO: Obtain the text view to display status.
+        //Obtain the text view to display status.
+        mStatusText = (TextView) root.findViewById(R.id.psg_status);
         return root;
     }
 
@@ -76,7 +85,8 @@ public class PhotoSearchGridFragment extends Fragment {
         //Allow parent to inflate its menu.
         super.onCreateOptionsMenu(menu, inflater);
 
-        //TODO: Inflate our menu using the base menu.
+        //Inflate our menu using the base menu.
+        inflater.inflate(R.menu.photo_search_grid, menu);
 
         //Find the search ActionView and attach a listener to it.
         MenuItem item = menu.findItem(R.id.psg_menu_search);
@@ -118,7 +128,12 @@ public class PhotoSearchGridFragment extends Fragment {
             Bundle args = new Bundle();
             args.putString(LOADER_ARG_QUERY, query);
 
-            //TODO: Initialize loader
+            //Initialize loader
+            if(mSearchLoaderStarted && !TextUtils.equals(mQuery, query)){
+                getLoaderManager().restartLoader(LOADER_ID_SEARCH, args, mSearchLoaderCallbacks);
+            } else {
+                getLoaderManager().initLoader(LOADER_ID_SEARCH, args, mSearchLoaderCallbacks);
+            }
 
             //Save the search value and the fact that this instance has started the loader.
             mQuery = query;
@@ -182,8 +197,10 @@ public class PhotoSearchGridFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        Activity activity = (Activity)context;
 
         //When the activity is attached we enforce that it is a listener for this fragment and store a reference.
         if (activity instanceof PhotoSearchGridFragmentListener) {

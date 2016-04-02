@@ -37,22 +37,20 @@ public class PhotoApi {
     /**
      * Returns the URI to obtain a small, square thumbnail image.
      * 
-     * @param context
      * @param photo
      * @return
      */
-    public static String getThumbnailPhotoUri(Context context, Photo photo) { 
+    public static String getThumbnailPhotoUri(Photo photo) {
         return String.format(Locale.US, "http://farm%1$d.static.flickr.com/%2$s/%3$s_%4$s_s.jpg", photo.farm, photo.server, photo.id, photo.secret);
     }
     
     /**
      * Returns the URI to obtain the full sized image.
      * 
-     * @param context
      * @param photo
      * @return
      */
-    public static String getNormalPhotoUri(Context context, Photo photo) { 
+    public static String getNormalPhotoUri(Photo photo) {
         return String.format(Locale.US, "http://farm%1$d.static.flickr.com/%2$s/%3$s_%4$s.jpg", photo.farm, photo.server, photo.id, photo.secret);
     }
 }

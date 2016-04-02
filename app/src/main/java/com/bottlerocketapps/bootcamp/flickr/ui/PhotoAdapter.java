@@ -2,9 +2,14 @@ package com.bottlerocketapps.bootcamp.flickr.ui;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
+import com.bottlerocketapps.bootcamp.R;
+import com.bottlerocketapps.bootcamp.flickr.api.PhotoApi;
 import com.bottlerocketapps.bootcamp.flickr.model.Photo;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,21 +33,27 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoViewHolder>
 
     @Override
     public PhotoViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        //TODO: Inflate photo item view
+        //Inflate photo item view
+        View itemView = LayoutInflater.from(mContext).inflate(R.layout.photo_search_grid_item, viewGroup, false);
 
-        //TODO: Create new photo view holder object
-        PhotoViewHolder viewHolder = null;
+        //Create new photo view holder object
+        PhotoViewHolder viewHolder = new PhotoViewHolder(itemView);
 
-        //TODO: Set up photo view click listener
+        //Set up photo view click listener
+        viewHolder.setOnPhotoViewClickListener(this);
 
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(PhotoViewHolder viewHolder, int position) {
-        //TODO: Get data from list item at position being shown by view holder
+        //Get data from list item at position being shown by view holder
+        Photo photo = mPhotos.get(position);
 
-        //TODO: Load the thumbnail image into the photo image view
+        //Load the thumbnail image into the photo image view
+        Picasso.with(mContext)
+                .load(PhotoApi.getThumbnailPhotoUri(photo))
+                .into(viewHolder.photo);
     }
 
     @Override

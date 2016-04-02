@@ -11,7 +11,6 @@ public class PhotoSearchActivity extends FragmentActivity implements PhotoSearch
 
     private static final String FRAG_PHOTO_SEARCH_GRID = "photoSearchGrid";
     private static final String FRAG_PHOTO_SEARCH_DETAIL = "photoDetail";
-
     private static final String BACKSTACK_DETAIL = "backstackDetail";
 
     @Override
@@ -19,12 +18,26 @@ public class PhotoSearchActivity extends FragmentActivity implements PhotoSearch
         super.onCreate(savedInstanceState);
         setContentView(R.layout.photo_search_activity);
 
-        //TODO: If there is no savedInstanceState then there are no Fragments in the fragment_container. Load the initial Fragment.
+        //If there is no savedInstanceState then there are no Fragments in the fragment_container. Load the initial Fragment.
+        if(savedInstanceState == null){
+            PhotoSearchGridFragment fragment = PhotoSearchGridFragment.newInstance();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.psa_fragment_container, fragment, FRAG_PHOTO_SEARCH_DETAIL)
+                    .commit();
+        }
     }
 
     @Override
     public void onPhotoSelected(Photo selectedPhoto) {
-        //TODO: A photo has been selected, display the detail fragment and add the transaction to the back stack.
+        //A photo has been selected, display the detail fragment and add the transaction to the back stack.
+        PhotoDetailFragment fragment = PhotoDetailFragment.newInstance(selectedPhoto);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.psa_fragment_container, fragment, FRAG_PHOTO_SEARCH_DETAIL)
+                .addToBackStack(BACKSTACK_DETAIL)
+                .commit();
     }
 
 }
