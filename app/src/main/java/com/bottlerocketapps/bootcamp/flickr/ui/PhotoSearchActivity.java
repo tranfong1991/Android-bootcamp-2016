@@ -33,6 +33,7 @@ public class PhotoSearchActivity extends FragmentActivity implements PhotoSearch
         //A photo has been selected, display the detail fragment and add the transaction to the back stack.
         PhotoDetailFragment fragment = PhotoDetailFragment.newInstance(selectedPhoto);
 
+        //use addToBackStack so that it will undo what the replace() did, meaning it will go back to the grid view
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.psa_fragment_container, fragment, FRAG_PHOTO_SEARCH_DETAIL)
