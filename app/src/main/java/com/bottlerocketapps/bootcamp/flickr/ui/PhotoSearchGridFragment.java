@@ -10,6 +10,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -48,6 +49,26 @@ public class PhotoSearchGridFragment extends Fragment {
 
         //Required in order for a Fragment to get a call to onCreateOptionsMenu()
         setHasOptionsMenu(true);
+
+        if(savedInstanceState != null){
+            mQuery = savedInstanceState.getString(SAVED_STATE_QUERY);
+        }
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
+
+        if(!TextUtils.isEmpty(mQuery)){
+            performSearch(mQuery);
+        }
+    }
+
+    //Called in cases like when the screen is rotated, instead of clean everything on the screen, it saves the current query and search for it again in onActivityCreated()
+    @Override
+    public void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+        outState.putString(SAVED_STATE_QUERY, mQuery);
     }
 
     @Override
